@@ -1,5 +1,6 @@
 const contentPath = `${__dirname}/../content`
 const packagesPath = `${__dirname}/../../packages`
+const removeMd = require('remove-markdown');
 
 module.exports = {
   // Seems it is not used, leave commented until published
@@ -160,9 +161,9 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-meilisearch',
       options: {
-        host: 'https://ms-34b8227cffad-142.saas.meili.dev',
-        apiKey: 'a03a969c320a217a36e47264e3a7ddbfccf87d71',
-        batchSize: 1,
+        host: 'http://localhost:7700',
+        apiKey: 'masterKey',
+        skipIndexing: false,
         indexes: [
           {
             indexUid: 'nikita-api-docs',
@@ -171,12 +172,12 @@ module.exports = {
             },
             transformer: (data) =>
               data.allMdx.edges
-                // .filter(
-                //   ({ node }) =>
-                //     node.slug.search('guide') !== -1 ||
-                //     node.slug.search('project') !== -1 ||
-                //     node.slug.search('api') !== -1
-                // )
+                .filter(
+                  ({ node }) =>
+                    node.slug.search('guide') !== -1 ||
+                    node.slug.search('project') !== -1 ||
+                    node.slug.search('api') !== -1
+                )
                 .map(({ node }) => {
                   // Have to update for versioning
                   const currentVersion =
@@ -191,7 +192,7 @@ module.exports = {
                     lvl1:
                       node.frontmatter.title || node.frontmatter.navtitle || '',
                     lvl2: node.frontmatter.description || '',
-                    content: node.rawBody,
+                    content: removeMd(node.rawBody),
                     url: `${currentVersion}/${node.slug}`,
                   }
                 }),

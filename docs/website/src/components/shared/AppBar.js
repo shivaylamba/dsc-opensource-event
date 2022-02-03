@@ -1,7 +1,7 @@
 // React
 import React, { useEffect, useRef } from 'react'
 // Material UI
-import docsSearchBar from 'docs-searchbar.js'
+// import docsSearchBar from 'docs-searchbar.js'
 import 'docs-searchbar.js/dist/cdn/docs-searchbar.css'
 import { useTheme } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
@@ -14,6 +14,7 @@ import BugReportOutlined from '@material-ui/icons/BugReportOutlined'
 import { FaGithub } from 'react-icons/fa'
 import Typography from '@material-ui/core/Typography'
 import SvgIcon from '@material-ui/core/SvgIcon'
+import './appbar.css'
 // Gatsby
 import { Link } from 'gatsby'
 
@@ -92,17 +93,21 @@ const MyAppBar = ({ opacity = 1, onMenuClick, shift, site }) => {
   })
 
   useEffect(() => {
-    docsSearchBar({
-      hostUrl: 'https://ms-34b8227cffad-142.saas.meili.dev',
-      apiKey: 'a03a969c320a217a36e47264e3a7ddbfccf87d71',
-      indexUid: 'nikita-api-docs',
-      inputSelector: '#search-bar-input',
-      meilisearchOptions: {
-        limit: 5,
-      },
-      debug: true,
-      enhancedSearchInput: true,
-    })
+    if(window !== undefined){
+      const docsSearchBar = require('docs-searchbar.js').default
+
+      docsSearchBar({
+        hostUrl: 'http://localhost:7700',
+        apiKey: 'masterKey',
+        indexUid: 'nikita-api-docs',
+        inputSelector: '#search-bar-input',
+        meilisearchOptions: {
+          limit: 5,
+        },
+        debug: true,
+        enhancedSearchInput: true,
+      })
+    }
   }, [])
 
   return (
